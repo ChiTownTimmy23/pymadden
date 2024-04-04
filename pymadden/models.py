@@ -1,0 +1,89 @@
+# ea_ratings_api/models.py
+from typing import List
+
+from pydantic import BaseModel
+
+
+class PlayerRating(BaseModel):
+    college: str
+    awareness_rating: int
+    throwPower_rating: int
+    kickReturn_rating: int
+    leadBlock_rating: int
+    strength_rating: int
+    bCVision_rating: int
+    catchInTraffic_rating: int
+    playAction_rating: int
+    pursuit_rating: int
+    plyrAssetname: str
+    mediumRouteRunning_rating: int
+    catching_rating: int
+    acceleration_rating: int
+    spinMove_rating: int
+    height: int
+    finesseMoves_rating: int
+    spectacularCatch_rating: int
+    runBlock_rating: int
+    tackle_rating: int
+    injury_rating: int
+    zoneCoverage_rating: int
+    weight: int
+    plyrBirthdate: str
+    runningStyle_rating: str
+    deepRouteRunning_rating: int
+    firstName: str
+    yearsPro: int
+    totalSalary: int
+    trucking_rating: int
+    throwAccuracyShort_rating: int
+    position: str
+    jukeMove_rating: int
+    playRecognition_rating: int
+    shortRouteRunning_rating: int
+    status: str
+    lastName: str
+    jerseyNum: int
+    breakSack_rating: int
+    speed_rating: int
+    runBlockPower_rating: int
+    jumping_rating: int
+    toughness_rating: int
+    throwOnTheRun_rating: int
+    manCoverage_rating: int
+    stiffArm_rating: int
+    powerMoves_rating: int
+    iteration: str
+    release_rating: int
+    hitPower_rating: int
+    throwAccuracyMid_rating: int
+    kickAccuracy_rating: int
+    passBlockPower_rating: int
+    impactBlocking_rating: int
+    stamina_rating: int
+    carrying_rating: int
+    breakTackle_rating: int
+    plyrPortrait: int
+    kickPower_rating: int
+    plyrHandedness: str
+    throwUnderPressure_rating: int
+    team: str
+    signingBonus: int
+    passBlock_rating: int
+    changeOfDirection_rating: int
+    press_rating: int
+    throwAccuracyDeep_rating: int
+    archetype: str
+    blockShedding_rating: int
+    runBlockFinesse_rating: int
+    teamId: int
+    agility_rating: int
+    fullNameForSearch: str
+    overall_rating: int
+    passBlockFinesse_rating: int
+    age: int
+    primaryKey: int
+
+
+class RatingsResponse(BaseModel):
+    count: int
+    docs: List[PlayerRating]

@@ -1,0 +1,23 @@
+# .ruff.toml
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+    "PLE",  # pylint errors
+    "PLW",  # pylint warnings
+]
+
+ignore = [
+    "E501",  # line too long
+    # Add any other rules you want to ignore
+]
+
+exclude = [
+    ".venv",
+    ".git",
+    "*.md",
+    # Add any other files or directories to exclude
+]

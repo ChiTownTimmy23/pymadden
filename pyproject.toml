@@ -1,0 +1,43 @@
+[tool.poetry]
+name = "pymadden"
+version = "0.1.0"
+description = "A Python library for accessing the EA Ratings API."
+authors = ["Timothy Byrne <trbyrne.11@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+requests = "^2.28.0"
+pydantic = "^1.9.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dev-dependencies]
+ruff = "^0.0.138"
+isort = "^5.10.1"
+flake8 = "^4.0.1"
+black = "^22.3.0"
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 88
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | \.mypy_cache
+  | build
+  | dist
+)/
+'''
