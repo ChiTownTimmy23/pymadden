@@ -4,6 +4,10 @@
 test:
     pytest tests/
 
+# Run tests with coverage
+test-cov:
+    pytest --cov=pymadden --cov-report=term-missing tests/
+
 # Run linting with Ruff
 lint:
     ruff .
