@@ -10,12 +10,11 @@ test-cov:
 
 # Run linting with Ruff
 lint:
-    ruff .
+    ruff check .
 
 # Run code formatting with Black and sort imports with isort
 format:
-	poetry run black .
-	poetry run isort .
+    ruff format .
 
 # Install project dependencies
 install:
