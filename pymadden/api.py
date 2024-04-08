@@ -1,5 +1,6 @@
-from pymadden.models import RatingsResponse
 from pymadden.client import EARatingsClient
+from pymadden.models import RatingsResponse
+
 
 class EARatingsAPI:
     VALID_GAME_VERSIONS = ["m21-ratings", "m22-ratings", "m23-ratings", "m24-ratings"]
@@ -11,12 +12,16 @@ class EARatingsAPI:
     def _validate_game_version(self, game_version: str) -> None:
         if game_version not in self.VALID_GAME_VERSIONS:
             raise ValueError(
-                f"Invalid game version. Allowed versions are {', '.join(self.VALID_GAME_VERSIONS)}."
+                f"Invalid game version. Allowed versions are {', '.join(self.VALID_GAME_VERSIONS)}."  # noqa: E501
             )
 
     def _validate_week_number(self, week_number: int) -> None:
-        if not isinstance(week_number, int) or (week_number < 0 and week_number not in [0, 19, 20, 21, 22, 23, 79, 99]):
-            raise ValueError("Week number must be a non-negative integer or one of the special iterations.")
+        if not isinstance(week_number, int) or (
+            week_number < 0 and week_number not in [0, 19, 20, 21, 22, 23, 79, 99]
+        ):
+            raise ValueError(
+                "Week number must be a non-negative integer or one of the special iterations."  # noqa: E501
+            )
 
     def get_ratings(self, iteration: str = "launch-ratings") -> RatingsResponse:
         response_data = self.client._make_request(iteration)

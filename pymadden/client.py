@@ -1,11 +1,12 @@
 import requests
 
+
 class EARatingsClient:
     """
     A client for interacting with the EA Ratings API.
 
-    This class provides methods to retrieve rating information for a specific game version
-    and iteration from the EA Ratings API.
+    This class provides methods to retrieve rating information for a specific
+    game version and iteration from the EA Ratings API.
 
     Args:
         game_version (str): The version of the game for which to retrieve ratings.
@@ -16,8 +17,10 @@ class EARatingsClient:
 
     Methods:
         _make_request(iteration: str) -> dict:
-            Makes a request to the EA Ratings API for the specified game version and iteration.
-            Returns the JSON response if the request is successful, otherwise raises an exception.
+            Makes a request to the EA Ratings API for the specified
+            game version and iteration.
+            Returns the JSON response if the request is successful,
+            otherwise raises an exception.
     """
 
     BASE_URL = "https://ratings-api.ea.com/v2/entities/"
