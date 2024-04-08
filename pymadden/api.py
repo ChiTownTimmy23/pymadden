@@ -1,18 +1,18 @@
-from pymadden.client import EARatingsClient
-from pymadden.models import RatingsResponse
-
+# api.py
+from typing import List
+from pymadden.models import RatingsResponse, PlayerRating
+from pymadden.config import VALID_GAME_VERSIONS, BASE_URL
+import requests
 
 class EARatingsAPI:
-    VALID_GAME_VERSIONS = ["m21-ratings", "m22-ratings", "m23-ratings", "m24-ratings"]
-
     def __init__(self, game_version: str):
         self._validate_game_version(game_version)
-        self.client = EARatingsClient(game_version)
+        self.game_version = game_version
 
     def _validate_game_version(self, game_version: str) -> None:
-        if game_version not in self.VALID_GAME_VERSIONS:
+        if game_version not in VALID_GAME_VERSIONS:
             raise ValueError(
-                f"Invalid game version. Allowed versions are {', '.join(self.VALID_GAME_VERSIONS)}."  # noqa: E501
+                f"Invalid game version. Allowed versions are {', '.join(VALID_GAME_VERSIONS)}."
             )
 
     def _validate_week_number(self, week_number: int) -> None:
@@ -20,14 +20,38 @@ class EARatingsAPI:
             week_number < 0 and week_number not in [0, 19, 20, 21, 22, 23, 79, 99]
         ):
             raise ValueError(
-                "Week number must be a non-negative integer or one of the special iterations."  # noqa: E501
+                "Week number must be a non-negative integer or one of the special iterations."
             )
 
-    def get_ratings(self, iteration: str = "launch-ratings") -> RatingsResponse:
-        response_data = self.client._make_request(iteration)
-        return RatingsResponse(**response_data)
+    def _fetch_ratings(self, iteration: str, limit: int = 1000) -> List[PlayerRating]:
+        offset = 0
+        total_count = 0
+        all_players = []
 
-    def get_ratings_by_week(self, week_number: int) -> RatingsResponse:
+        while True:
+            url = f"{BASE_URL}{self.game_version}?filter=iteration:{iteration}&limit={limit}&offset={offset}"
+            response = requests.get(url)
+
+            if response.status_code == 200:
+                response_data = response.json()
+                total_count = response_data["count"]
+                players = [PlayerRating(**player) for player in response_data["docs"]]
+                all_players.extend(players)
+
+                if offset + limit >= total_count:
+                    break
+
+                offset += limit
+            else:
+                raise RatingsAPIError(
+                    f"Request failed with status code {response.status_code}")
+
+        return all_players
+
+    def get_ratings(self, iteration: str = "launch-ratings") -> List[PlayerRating]:
+        return self._fetch_ratings(iteration)
+
+    def get_ratings_by_week(self, week_number: int) -> List[PlayerRating]:
         self._validate_week_number(week_number)
 
         special_iterations = {
@@ -42,5 +66,8 @@ class EARatingsAPI:
         }
 
         iteration = special_iterations.get(week_number, f"week-{week_number}")
-        response_data = self.client._make_request(iteration)
-        return RatingsResponse(**response_data)
+        return self._fetch_ratings(iteration)
+
+class RatingsAPIError(Exception):
+    """Custom exception class for API errors."""
+    pass
