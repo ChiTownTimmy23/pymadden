@@ -33,7 +33,4 @@ launch_ratings = api.get_ratings()
 
 # Retrieve player ratings for a specific week
 week_1_ratings = api.get_ratings_by_week(1)
-
-# Write the ratings data to the database
-api.write_ratings_to_db(launch_ratings)
 ```

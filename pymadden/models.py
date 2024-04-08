@@ -1,4 +1,3 @@
-# ea_ratings_api/models.py
 from typing import List
 
 from pydantic import BaseModel
