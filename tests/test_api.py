@@ -1,6 +1,6 @@
-from pymadden.client import EARatingsClient
+from pymadden.api import EARatingsAPI
 
 
 def test_api_initialization():
-    api = EARatingsClient("m23-ratings")
+    api = EARatingsAPI("m23-ratings")
     assert api.game_version == "m23-ratings"
