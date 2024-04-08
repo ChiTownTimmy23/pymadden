@@ -1,4 +1,3 @@
-# tests/test_api.py
 from unittest.mock import MagicMock, patch
 import pytest
 from pymadden.client import EARatingsClient
