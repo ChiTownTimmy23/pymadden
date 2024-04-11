@@ -4,7 +4,7 @@ Pymadden is a Python library that provides a convenient way to interact with the
 
 ## Features
 
-- Retrieve player ratings data for Madden NFL games (e.g., Madden 21, Madden 22, Madden 23)
+- Retrieve player ratings data for Madden NFL games (e.g., Madden 22, Madden 23)
 - Filter ratings data by iteration (e.g., launch-ratings, week-1, week-2, etc.)
 - Retrieve ratings data for a specific week
 - Provides Pydantic models for type validation and easy data manipulation
@@ -26,7 +26,7 @@ Here's a basic example of how to use pymadden to retrieve player ratings data:
 from pymadden import EARatingsAPI
 
 # Create an instance of the EARatingsAPI
-api = EARatingsAPI("m23-ratings", "sqlite:///ratings.db")
+api = EARatingsAPI("m23-ratings")
 
 # Retrieve player ratings for the launch iteration
 launch_ratings = api.get_ratings()
