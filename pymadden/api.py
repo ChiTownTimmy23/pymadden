@@ -3,6 +3,7 @@ from pymadden.models import RatingsResponse, PlayerRating
 from pymadden.config import VALID_GAME_VERSIONS, BASE_URL
 import requests
 
+
 class EARatingsAPI:
     """
     A class for interacting with the EA Ratings API.
@@ -47,7 +48,9 @@ class EARatingsAPI:
             ValueError: If the provided week number is invalid.
         """
         special_iterations = {0, 19, 20, 21, 22, 23, 79, 99}
-        if not isinstance(week_number, int) or (week_number < 0 and week_number not in special_iterations):
+        if not isinstance(week_number, int) or (
+            week_number < 0 and week_number not in special_iterations
+        ):
             raise ValueError(
                 "Week number must be a non-negative integer or one of the special iterations."
             )
@@ -138,10 +141,13 @@ class RatingsAPIError(Exception):
     """
     Custom exception class for API errors.
     """
+
     pass
+
 
 class WeekNotPlayedError(Exception):
     """
     Custom exception class for indicating that a week has not been played yet.
     """
+
     pass
