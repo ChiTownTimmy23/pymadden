@@ -65,6 +65,9 @@ db.sqlite3-journal
 instance/
 .webassets-cache
 
+# Ruff cache directory
+.ruff_cache/
+
 # Scrapy stuff:
 .scrapy
 

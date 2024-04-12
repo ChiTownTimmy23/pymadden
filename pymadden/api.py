@@ -1,7 +1,9 @@
 from typing import List
-from pymadden.models import RatingsResponse, PlayerRating
-from pymadden.config import VALID_GAME_VERSIONS, BASE_URL
+
 import requests
+
+from pymadden.config import BASE_URL, VALID_GAME_VERSIONS
+from pymadden.models import PlayerRating
 
 
 class EARatingsAPI:
@@ -130,9 +132,11 @@ class EARatingsAPI:
             ratings = self._fetch_ratings(iteration)
         except RatingsAPIError as e:
             if "not found" in str(e):
-                raise WeekNotPlayedError(f"Week {week_number} has not been played yet.")
+                raise WeekNotPlayedError(
+                    f"Week {week_number} has not been played yet."
+                ) from None
             else:
-                raise
+                raise Exception("An error occurred while fetching ratings.") from None
 
         return ratings
 

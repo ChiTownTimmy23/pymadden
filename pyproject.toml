@@ -49,23 +49,25 @@ minversion = "6.0"
 addopts = "--verbose"
 testpaths = ["tests",]
 
-tool.ruff.lint.select = [
-    "E",  # pycodestyle errors
-    "W",  # pycodestyle warnings
-    "F",  # pyflakes
-    "I",  # isort
-    "C",  # flake8-comprehensions
-    "B",  # flake8-bugbear
+[tool.ruff]
+lint.select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "C",    # flake8-comprehensions
+    "B",    # flake8-bugbear
     "PLE",  # pylint errors
     "PLW",  # pylint warnings
 ]
 
-tool.ruff.lint.ignore = [
+
+lint.ignore = [
     "E501",  # line too long
     # Add any other rules you want to ignore
 ]
 
-tool.ruff.exclude = [
+exclude = [
     ".venv",
     ".git",
     "*.md",

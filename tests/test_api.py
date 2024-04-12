@@ -1,6 +1,7 @@
 # test_api.py
 import pytest
-from pymadden.api import EARatingsAPI, RatingsAPIError
+
+from pymadden.api import EARatingsAPI
 from pymadden.models import PlayerRating
 
 
