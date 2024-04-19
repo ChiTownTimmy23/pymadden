@@ -1,5 +1,6 @@
 from typing import Dict, List
 
+
 class Config:
     BASE_URL: str = "https://ratings-api.ea.com/v2/entities"
     RATINGS_PATHS: Dict[str, str] = {
