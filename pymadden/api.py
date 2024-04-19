@@ -1,157 +1,47 @@
+import aiohttp
 from typing import List
-
-import requests
-
-from pymadden.config import BASE_URL, VALID_GAME_VERSIONS
-from pymadden.models import PlayerRating
+from .config import Config
+from .models import PlayerRating, RatingsResponse
 
 
-class EARatingsAPI:
-    """
-    A class for interacting with the EA Ratings API.
-    """
-
-    def __init__(self, game_version: str):
-        """
-        Initialize the EARatingsAPI instance with the specified game version.
-
-        Args:
-            game_version (str): The version of the game (e.g., "m22-ratings").
-
-        Raises:
-            ValueError: If the provided game version is invalid.
-        """
-        self._validate_game_version(game_version)
-        self.game_version = game_version
-
-    def _validate_game_version(self, game_version: str) -> None:
-        """
-        Validate the provided game version.
-
-        Args:
-            game_version (str): The version of the game.
-
-        Raises:
-            ValueError: If the provided game version is invalid.
-        """
-        if game_version not in VALID_GAME_VERSIONS:
+class MaddenAPI:
+    def __init__(self, game_year: str = "m23"):
+        if game_year not in Config.RATINGS_PATHS:
             raise ValueError(
-                f"Invalid game version. Allowed versions are {', '.join(VALID_GAME_VERSIONS)}."
+                f"Invalid game_year. Available options: {', '.join(Config.RATINGS_PATHS.keys())}"
+            )
+        self.base_url = Config.BASE_URL
+        self.ratings_path = Config.RATINGS_PATHS[game_year]
+
+    async def get_players(
+        self, iteration: str = "launch-ratings"
+    ) -> List[PlayerRating]:
+        """
+        Retrieve a list of all player ratings for a given iteration.
+
+        :param iteration: The iteration to retrieve player ratings for (e.g., "launch-ratings", "week-1", etc.)
+        :return: A list of PlayerRating objects
+        :raises ValueError: If the provided iteration is not valid
+        """
+        if iteration not in Config.ITERATIONS:
+            raise ValueError(
+                f"Invalid iteration. Available options: {', '.join(Config.ITERATIONS)}"
             )
 
-    def _validate_week_number(self, week_number: int) -> None:
-        """
-        Validate the provided week number.
+        url = f"{self.base_url}/{self.ratings_path}?filter=iteration:{iteration}"
+        player_ratings = []
 
-        Args:
-            week_number (int): The week number.
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                data = await response.json()
+                total_count = data["count"]
+                player_ratings.extend(RatingsResponse(**data).docs)
 
-        Raises:
-            ValueError: If the provided week number is invalid.
-        """
-        special_iterations = {0, 19, 20, 21, 22, 23, 79, 99}
-        if not isinstance(week_number, int) or (
-            week_number < 0 and week_number not in special_iterations
-        ):
-            raise ValueError(
-                "Week number must be a non-negative integer or one of the special iterations."
-            )
+            page = 1
+            while len(player_ratings) < total_count:
+                page += 1
+                async with session.get(f"{url}&page={page}") as response:
+                    data = await response.json()
+                    player_ratings.extend(RatingsResponse(**data).docs)
 
-    def _fetch_ratings(self, iteration: str, limit: int = 1000) -> List[PlayerRating]:
-        """
-        Fetch player ratings for the specified iteration.
-
-        Args:
-            iteration (str): The iteration to fetch ratings for (e.g., "launch-ratings").
-            limit (int): The maximum number of ratings to fetch per request.
-
-        Returns:
-            List[PlayerRating]: A list of player ratings.
-
-        Raises:
-            RatingsAPIError: If the API request fails.
-        """
-        offset = 0
-        total_count = 0
-        all_players = []
-
-        while True:
-            params = {
-                "filter": f"iteration:{iteration}",
-                "limit": limit,
-                "offset": offset,
-            }
-            response = requests.get(f"{BASE_URL}{self.game_version}", params=params)
-
-            if response.status_code == 200:
-                response_data = response.json()
-                total_count = response_data["count"]
-                players = [PlayerRating(**player) for player in response_data["docs"]]
-                all_players.extend(players)
-
-                if offset + limit >= total_count:
-                    break
-                offset += limit
-            else:
-                raise RatingsAPIError(
-                    f"Request failed with status code {response.status_code}: {response.text}"
-                )
-
-        return all_players
-
-    def get_ratings(self, iteration: str = "launch-ratings") -> List[PlayerRating]:
-        """
-        Get player ratings for the specified iteration.
-
-        Args:
-            iteration (str): The iteration to fetch ratings for (e.g., "launch-ratings").
-
-        Returns:
-            List[PlayerRating]: A list of player ratings.
-        """
-        return self._fetch_ratings(iteration)
-
-    def get_ratings_by_week(self, week_number: int) -> List[PlayerRating]:
-        """
-        Get player ratings for the specified week number.
-
-        Args:
-            week_number (int): The week number.
-
-        Returns:
-            List[PlayerRating]: A list of player ratings.
-
-        Raises:
-            ValueError: If the provided week number is invalid.
-            WeekNotPlayedError: If the specified week has not been played yet.
-        """
-        self._validate_week_number(week_number)
-        iteration = f"week-{week_number}"
-
-        try:
-            ratings = self._fetch_ratings(iteration)
-        except RatingsAPIError as e:
-            if "not found" in str(e):
-                raise WeekNotPlayedError(
-                    f"Week {week_number} has not been played yet."
-                ) from None
-            else:
-                raise Exception("An error occurred while fetching ratings.") from None
-
-        return ratings
-
-
-class RatingsAPIError(Exception):
-    """
-    Custom exception class for API errors.
-    """
-
-    pass
-
-
-class WeekNotPlayedError(Exception):
-    """
-    Custom exception class for indicating that a week has not been played yet.
-    """
-
-    pass
+        return player_ratings
