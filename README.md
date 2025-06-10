@@ -8,6 +8,7 @@ Pymadden is a Python library that provides a convenient way to interact with the
 - Filter ratings data by iteration (e.g., launch-ratings, week-1, week-2, etc.)
 - Retrieve ratings data for a specific week
 - Asynchronous API support for efficient data retrieval and pagination handling
+- Comprehensive player data with 70+ attributes including ratings, physical stats, and contract details
 - Provides Pydantic models for type validation and easy data manipulation
 - Includes unit tests to ensure reliability and maintainability
 
