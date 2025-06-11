@@ -10,6 +10,7 @@ Pymadden is a Python library that provides a convenient way to interact with the
 - Asynchronous API support for efficient data retrieval and pagination handling
 - Comprehensive player data with 70+ attributes including ratings, physical stats, and contract details
 - Provides Pydantic models for type validation and easy data manipulation
+- Built-in error handling and rate limiting to respect EA's API constraints
 - Includes unit tests to ensure reliability and maintainability
 
 ## Installation
