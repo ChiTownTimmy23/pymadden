@@ -1,28 +1,32 @@
-[tool.poetry]
+[project]
 name = "pymadden"
 version = "0.1.0"
 description = "A Python library for accessing the EA Ratings API."
-authors = ["Timothy Byrne <trbyrne.11@gmail.com>"]
 readme = "README.md"
+authors = [
+    {name = "Timothy Byrne", email = "trbyrne.11@gmail.com"},
+]
+requires-python = ">=3.8,<4.0"
+dependencies = [
+    "pydantic>=1.9.0,<2.0.0",
+    "aiohttp>=3.9.5,<4.0.0",
+    "aiodns>=3.2.0,<4.0.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.8"
-pydantic = "^1.9.0"
-aiohttp = "^3.9.5"
-aiodns = "^3.2.0"
+[dependency-groups]
+dev = [
+    "ruff>=0.3.5,<1.0.0",
+    "isort>=5.10.1,<6.0.0",
+    "flake8>=4.0.1,<5.0.0",
+    "black>=22.3.0,<23.0.0",
+    "pytest>=7.1.2,<8.0.0",
+    "pytest-cov>=5.0.0,<6.0.0",
+    "pytest-asyncio>=0.18.3,<1.0.0",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.dev-dependencies]
-ruff = "^0.3.5"
-isort = "^5.10.1"
-flake8 = "^4.0.1"
-black = "^22.3.0"
-pytest = "^7.1.2"
-pytest-cov = "^5.0.0"
-pytest-asyncio = "^0.18.3"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.isort]
 profile = "black"
@@ -66,7 +70,6 @@ lint.select = [
     "PLW",  # pylint warnings
 ]
 
-
 lint.ignore = [
     "E501",  # line too long
     # Add any other rules you want to ignore
@@ -78,3 +81,5 @@ exclude = [
     "*.md",
     # Add any other files or directories to exclude
 ]
+
+
