@@ -1,8 +1,20 @@
 # Justfile for pymadden project
 
-# Run tests
+# Run all tests
 test:
     pytest tests/
+
+# Run only fast unit tests
+test-unit:
+    pytest tests/ -m "not integration and not performance" -v
+
+# Run integration tests (requires internet)
+test-integration:
+    pytest tests/ -m integration -v
+
+# Run performance tests 
+test-performance:
+    pytest tests/ -m performance -v
 
 # Run tests with coverage
 test-cov:
