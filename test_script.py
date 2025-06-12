@@ -1,5 +1,6 @@
 # test_script.py
 import asyncio
+from pprint import pprint
 from pymadden import MaddenAPI
 
 async def main():
@@ -10,10 +11,12 @@ async def main():
         ratings = await api.get_players()
         print(f"Retrieved {len(ratings)} players")
         
-        # Print first player as example
+        # Print first 10 players as examples
         if ratings:
-            first_player = ratings[0]
-            print(f"First player: {first_player}")
+            print("\nFirst 10 players:")
+            for i, player in enumerate(ratings[:10], 1):
+                print(f"\n{i}. Player:")
+                pprint(player.dict() if hasattr(player, 'dict') else player.__dict__)
             
     except Exception as e:
         print(f"Error: {e}")
