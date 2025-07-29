@@ -437,3 +437,7 @@ cython_debug/
 #  macOS-specific metadata files created by Finder
 #  These contain custom attributes like icon positions and folder backgrounds
 .DS_Store
+
+# Development-specific files
+CLAUDE.md
+PRD.md
