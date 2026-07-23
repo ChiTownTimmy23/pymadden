@@ -2,35 +2,39 @@
 
 # Run tests
 test:
-    pytest tests/
+    uv run pytest tests/
 
 # Run tests with coverage
 test-cov:
-    pytest --cov=pymadden --cov-report=term-missing tests/
+    uv run pytest --cov=pymadden --cov-report=term-missing tests/
 
 # Run linting with Ruff
 lint:
-    ruff check .
+    uv run ruff check .
 
-# Run code formatting with Black and sort imports with isort
+# Run code formatting with Ruff
 format:
-    ruff format .
+    uv run ruff format .
 
 # Install project dependencies
 install:
-    poetry install
+    uv sync
 
 # Run the pre-commit hooks
 pre-commit:
     pre-commit run --all-files
 
-# Run all checks (tests, linting, formatting, and import sorting)
+# Run all checks (tests, linting, formatting)
 check: test lint format
+
+# Fetch live data as a smoke test
+smoke:
+    uv run python test_script.py
 
 # Build the project
 build:
-    poetry build
+    uv build
 
 # Publish the project to PyPI
 publish:
-    poetry publish
+    uv publish

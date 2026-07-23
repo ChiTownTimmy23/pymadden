@@ -1,25 +1,38 @@
-# test_script.py
+# test_script.py — live smoke test against the real EA APIs.
 import asyncio
-from pprint import pprint
-from pymadden import MaddenAPI
 
-async def main():
-    api = MaddenAPI("m24")
-    
-    try:
-        # Get some ratings data
-        ratings = await api.get_players()
-        print(f"Retrieved {len(ratings)} players")
-        
-        # Print first 10 players as examples
-        if ratings:
-            print("\nFirst 10 players:")
-            for i, player in enumerate(ratings[:10], 1):
-                print(f"\n{i}. Player:")
-                pprint(player.dict() if hasattr(player, 'dict') else player.__dict__)
-            
-    except Exception as e:
-        print(f"Error: {e}")
+from pymadden import MaddenAPI, derive_features
+
+
+async def demo(game: str) -> None:
+    print(f"\n=== {game} ===")
+    async with MaddenAPI(game) as api:
+        players = await api.get_players()
+    print(f"Retrieved {len(players)} players")
+
+    top = sorted(
+        players,
+        key=lambda p: getattr(p, "overall_rating", None)
+        or getattr(p, "overallRating", 0),
+        reverse=True,
+    )[:5]
+    for i, player in enumerate(top, 1):
+        print(f"  {i}. {player}")
+
+    features = derive_features(top[0])
+    print(
+        f"  Derived for {features['fullName']}: "
+        f"speed_score={features['speed_score']}, bmi={features['bmi']}"
+    )
+
+
+async def main() -> None:
+    for game in ("m24", "m25"):
+        try:
+            await demo(game)
+        except Exception as exc:
+            print(f"Error for {game}: {exc}")
+
 
 if __name__ == "__main__":
     asyncio.run(main())
