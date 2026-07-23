@@ -6,6 +6,8 @@ readme = "README.md"
 authors = [
     {name = "Timothy Byrne", email = "trbyrne.11@gmail.com"},
 ]
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.10,<4.0"
 dependencies = [
     "httpx>=0.27.0,<1.0.0",
@@ -22,6 +24,11 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+
+[project.urls]
+Homepage = "https://github.com/ChiTownTimmy23/pymadden"
+Repository = "https://github.com/ChiTownTimmy23/pymadden"
+Issues = "https://github.com/ChiTownTimmy23/pymadden/issues"
 
 [project.scripts]
 pymadden = "pymadden.cli:main"
